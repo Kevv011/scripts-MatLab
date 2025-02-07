@@ -1,0 +1,33 @@
+fprintf('\n-------------------METODO DEL PUNTO FIJO-------------------\n');
+
+%Variables e inputs
+syms x 
+gf=input('Ingrese g(x): ');                    %Ingreso de funcion g(x)
+x0=input('Ingrese punto inicial x0: ');        %Ingreso de un punto inicial x0
+tol=input('Ingrese el margen de error: 10^-'); %Tolerancia admitida 
+
+%Operaciones iniciales
+tol=10^-tol;        %Se completa el input de la TOLERANCIA
+x1=subs(gf,x0);     %Se evalua x0 en g(x) para crear x1 => Sucesion Xn=f[Xn-1]
+cont=1;             %Inicializacion de contador de iteraciones
+error=abs(x1-x0);   %Forma de calculo del error segun el metodo
+
+fprintf('n\t|X0\t\t\t\t\t|X1\t\t\t\t\t|ERROR');
+fprintf('\n%d\t|%.15f\t|%.15f\t|%e', cont,double(x0),double(x1),double(error));
+
+%Busqueda del punto fijo a partir del iteracionamiento
+while(error>tol && cont<100) %Mientras el error > tolerancia y cont<100,
+    x0=x1;                   %se recorrera el bucle
+    x1=double(subs(gf,x0));
+    cont=cont+1;
+    error=double(abs(x1-x0));
+    fprintf('\n%d\t|%.15f\t|%.15f\t|%e', cont,double(x0),double(x1),double(error));
+end
+fprintf('\nEl valor aproximado de X es: %.15f\n',double(x1));
+
+%Si se coloca una funcion g(x) que no cumplan con los criterios de Banach,
+%Generara un resultado INFINITO o una raiz que no esta en el intervalo
+
+%CRITERIOR DE BANACH A CUMPLIR
+%1) g(x) debe estar dentro del cuadrado formado por el intervalo y no salirse
+%2) g'(x) debe cumplir que |g'(x)| < 1
