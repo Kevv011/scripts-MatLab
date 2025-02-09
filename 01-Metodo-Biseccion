@@ -1,0 +1,38 @@
+disp('--------------------METODO DE BISECCION--------------------')
+
+%Ingreso de inputs
+syms x
+f=input('Introduzca la funcion: ');
+a=input('Introduzca intervalo a: ');
+b=input('Introduzca intervalo b: ');
+tol=input('Ingrese el margen de error 10^-');
+
+tol=10^-tol;  %Se forma el margen de error
+fa=subs(f,a); %Evaluacion en la funcion f(a)
+fb=subs(f,b); %Evaluacion en la funcion f(b)
+
+if fa*fb<0        % Si hay cambio de signo entre f(a) y f(b) (Teorema de bolzano)
+    c=(a+b)/2;    % Calculando el punto medio entre a y b
+    fc=subs(f,c); % Evaluando la función en c
+    cont=1;
+    error=abs(fc);
+    fprintf('n || a \t\t\t\t || b \t\t\t\t || c \t\t\t\t || error\n')
+    fprintf('%d || %.15f || %.15f || %.15f || %e\n', cont, double(a), double(b), double(c), double(error))
+
+    while error>tol
+        cont=cont+1;
+        if fa*fc<0  % Hay una raíz entre a y c
+            b=c;
+            c=(a+b)/2;
+            error=abs(c-b);
+        else
+            a=c;
+            c=(a+b)/2;
+            error=abs(c-a);
+        end
+        
+        fc=subs(f,c);
+        fprintf('%d || %.15f || %.15f || %.15f || %e\n', cont, double(a), double(b), double(c), double(error))
+    end % fin del while
+    fprintf('\nEl valor aproximado de X es: %.15f\n', double(c))
+end
