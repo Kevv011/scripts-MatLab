@@ -1,0 +1,44 @@
+disp('------------------METODO DE NEWTON RAPHSON EN MAXIMO RELATIVO--------------------');
+syms x;
+
+%Inputs del programa
+f=input('Funcion f(x): ');
+x0=input('Valor inicial del intervalo: ');
+tol=input('Margen de error: 10^-');
+
+%Operacionamiento inicial
+tol=10^-tol;
+cont=1;
+
+df=diff(f);   %Calculo de la primera
+dff=diff(df); %Y segunda derivada
+
+fa=subs(df,x0);  %Evaluacion de ambas funciones en x0
+fb=subs(dff,x0);
+
+x1=x0-(fa/fb); %La formula se aplica como x1=x0-[f'(x0)/f''(x0)]
+error=abs(x1-x0);
+
+fprintf('n | X0\t\t\t | X1\t\t\t | Error \n');
+fprintf('%d | %.15f | %.15f | %e \n', cont, double(x0), double(x1), double(error));
+
+while(error>tol)
+    cont=cont+1;
+   
+    x0=x1;
+    fa=subs(df,x0);
+    fb=subs(dff,x0);
+    x1=x0-(fa/fb); %La formula se aplica como x1=x0-[f'(x0)/f''(x0)]
+    error=abs(x1-x0);
+    
+    fprintf('%d | %.15f | %.15f | %e \n', cont, double(x0), double(x1), double(error));
+end
+
+%Evaluando el ultimo valor de la iteracion x1 para comprobar si es un maximo o un minimo
+fb=subs(dff,x1);
+
+if (fb<0)
+    fprintf('Se encontro el maximo relativo de la funcion esta en X=%.15f \n', double(x1));
+end
+
+
