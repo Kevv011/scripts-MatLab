@@ -1,0 +1,49 @@
+disp('----------------------METODO DE LA POSICION FALSA----------------------');
+syms x;
+
+%Inputs del programa
+f=input('Ingresar funcion f(x): ');
+x0=input('Ingresar valor inicial x0: ');
+x1=input('Ingresar valor inicial x1: ');
+tol=input('Margen de error: 10^-');
+
+%Operacionamiento inicial
+tol=10^-tol;
+f0=double(subs(f,x0));
+f1=double(subs(f,x1));
+
+if(f0*f1<0)
+    cont=1;
+    
+    x2=x1-((f1*(x1-x0))/(f1-f0));
+    error=double(abs(x2-x1));
+
+    fprintf('n\t |X0 \t\t\t\t |X1 \t\t\t\t |X2 \t\t\t\t |Error \n');
+    fprintf('%d | %.15f | %.15f | %.15f | %e \n', cont,double(x0),double(x1),double(x2),double(error));
+
+    %Iteracionamiento
+    while(error>tol && cont<100)
+        cont=cont+1;
+        f2=double(subs(f,x2));
+    
+        if(f0*f2<0)
+            x1=x2;
+            
+        else %(f2*f1<0)
+            x0=x2;
+        end
+        
+        f0=double(subs(f,x0));
+        f1=double(subs(f,x1));
+        x2_anterior=x2;
+        
+        x2=x1-((f1*(x1-x0))/(f1-f0));
+        error=double(abs(x2-x2_anterior));
+        
+        fprintf('%d | %.15f | %.15f | %.15f | %e \n', cont,double(x0),double(x1),double(x2),double(error));
+    end
+    
+    fprintf('El valor aproximado de X es: %.15f \n', double(x2));
+else
+    fprintf('No se cumple la condicion f(x0)*f(x1)<0. Elegir otros valores iniciales \n');  
+end
