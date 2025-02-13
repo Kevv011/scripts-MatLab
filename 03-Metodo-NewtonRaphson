@@ -1,0 +1,34 @@
+disp('----------------------METODO DE NEWTON RAPHSON----------------------');
+
+%Inputs del programa
+syms x;
+f=input('Ingrese la funcion: ');
+x0=input('Ingrese el valor inicial: ');
+tol=input('Ingrese el margen de error: 10^-');
+
+%Operacionamiento inicial
+tol=10^-tol;
+df=diff(f);     %Calculo de la 1er derivada de f(x)
+fa=double(subs(f,x0));  %Evaluacion de x0 en ambas funciones
+fb=double(subs(df,x0));
+x1=x0-(fa/fb);    %Formula para iteraciones
+error=double(abs(x1-x0)); %Calculo del error
+cont=1;
+
+fprintf('n || X0 \t\t\t\t\t || X1 \t\t\t\t\t || Error\n');
+fprintf('%d || %.15f || %.15f || %e \n', cont,double(x0),double(x1),double(error));
+
+while (error>tol && cont<100) 
+    
+    cont=cont+1;
+    
+    x0=x1;
+    fa=double(subs(f,x0));  %Evaluacion de x0 en ambas funciones
+    fb=double(subs(df,x0));
+    x1=x0-(fa/fb);    %Formula para iteraciones
+    error=double(abs(x1-x0)); %Calculo del error
+    fprintf('%d || %.15f || %.15f || %e \n', cont,double(x0),double(x1),double(error)); 
+end
+
+fprintf('El valor aproximado de x es: %.15f \n', double(x1));
+
