@@ -1,0 +1,35 @@
+disp('-----------------------METODO DE LA SECANTE------------------------');
+syms x;
+
+%Inputs del programa
+f=input('Ingresar la funcion f(x): ');
+x0=input('Ingresar el primer valor inicial x0: ');
+x1=input('Ingresar el segundo valor inicial x1: ');
+tol=input('Margen de error: 10^-');
+
+%Procesamiento inicial
+tol=10^-tol;
+cont=1;
+
+f0=double(subs(f,x0));
+f1=double(subs(f,x1));
+x2=double(x1-((f1*(x1-x0))/(f1-f0)));
+error=double(abs(x2-x1));
+
+fprintf('n \t |X0 \t\t\t\t\t |X1 \t\t\t\t\t |X2 \t\t\t\t\t |Error \n');
+fprintf('%d | %.15f | %.15f | %.15f | %e \n',cont,double(x0),double(x1),double(x2),double(error));
+
+%Iteracionamiento
+while(error>tol && cont<100)
+   cont=cont+1;
+   
+    x0=x1;
+    x1=x2;
+    f0=double(subs(f,x0));
+    f1=double(subs(f,x1));
+    x2=double(x1-((f1*(x1-x0))/(f1-f0)));
+    error=double(abs(x2-x1));
+    
+    fprintf('%d | %.15f | %.15f | %.15f | %e \n',cont,double(x0),double(x1),double(x2),double(error));
+end
+fprintf('El valor aproximado de X es: %.15f \n',double(x2));
