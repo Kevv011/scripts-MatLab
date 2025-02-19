@@ -10,10 +10,10 @@ tol=input('Margen de error: 10^-');
 tol=10^-tol;
 cont=1;
 
-x1=double(subs(g,x0));
-x2=double(subs(g,x1));
-x3=double(x0-((x1-x0)^2/(x2-(2*x1)+x0)));
-error=double(abs(x3-x0));
+x1=subs(g,x0);
+x2=subs(g,x1);
+x3=x0-((x1-x0)^2/(x2-(2*x1)+x0));
+error=abs(x3-x0);
 
 fprintf('n|X0\t\t\t\t\t|X1\t\t\t\t\t|X2\t\t\t\t\t|X3\t\t\t\t\t|Error \n');
 fprintf('%d | %.15f | %.15f | %.15f | %.15f | %e \n',cont,double(x0),double(x1),double(x2),double(x3),double(error));
@@ -23,8 +23,8 @@ while(error>tol && cont<100)
     cont=cont+1;
     x0=x3;
     
-    x1=double(subs(g,x0));
-    x2=double(subs(g,x1));
+    x1=subs(g,x0);
+    x2=subs(g,x1);
     x3=double(x0-((x1-x0)^2/(x2-(2*x1)+x0)));
     error=double(abs(x3-x0));
     
