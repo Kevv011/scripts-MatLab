@@ -1,0 +1,47 @@
+disp('-----------------------------------METODO DE MULLER-----------------------------------');
+syms x;
+
+%Inputs del programa
+f=input('Ingresar la funcion f(x): ');
+x0=input('Ingresar valor inicial x0: ');
+x1=input('Ingresar valor inicial x1: ');
+x2=input('Ingresar valor inicial x2: ');
+tol=('Margen de error: 10^-');
+
+%Procesamienti inicial
+tol=10^-tol;
+cont=1;
+
+f0=subs(f,x0);
+f1=subs(f,x1);
+f2=subs(f,x2);
+
+a=((f0-f2)*(x1-x2)-(f1-f2)*(x0-x2))/((x0-x2)*(x1-x2)*(x0-x1));
+b=((f1-f2)*(x0-x2)^2-(f0-f2)*(x1-x2)^2)/((x0-x2)*(x1-x2)*(x0-x1));
+c=f2;
+x3=x2-(2*c)/(b+sign(b)*sqrt(b^2-4*a*c));
+error=abs(x3-x2);
+fprintf('n | X0 \t\t\t\t | X1 \t\t\t\t | X2 \t\t\t\t | X3 \t\t\t\t | a \t\t\t\t | b \t\t\t\t | c \t\t\t\t |Error\n');
+fprintf('%d | %.15f | %.15f | %.15f | %.15f | %.15f | %.15f | %.15f | %e \n',cont,double(x0),double(x1),double(x2),double(x3),double(a),double(b),double(c),double(error));
+
+%Iteracionamiento
+while (error>tol)
+    cont=cont+1;
+    
+    x0=x1;
+    x1=x2;
+    x2=x3;
+    
+    f0=double(subs(f,x0));
+    f1=double(subs(f,x1));
+    f2=double(subs(f,x2));
+
+    a=double(((f0-f2)*(x1-x2)-(f1-f2)*(x0-x2))/((x0-x2)*(x1-x2)*(x0-x1)));
+    b=double(((f1-f2)*(x0-x2)^2-(f0-f2)*(x1-x2)^2)/((x0-x2)*(x1-x2)*(x0-x1)));
+    c=f2;
+    x3=x2-(2*c)/(b+sign(b)*sqrt(b^2-4*a*c));
+    error=abs(x3-x2);
+    
+    fprintf('%d | %.15f | %.15f | %.15f | %.15f | %.15f | %.15f | %.15f | %e \n',cont,double(x0),double(x1),double(x2),double(x3),double(a),double(b),double(c),double(error));
+end
+fprintf('El valor aproximado de x es: %.15f \n', double(x3));
