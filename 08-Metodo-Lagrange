@@ -1,0 +1,30 @@
+syms x;
+
+X=[0 3 8 13];           %Array de valores Xn
+%f=x*sin(x);            %Funcion en caso no se proporcionen valores f(x)
+%Y=double(subs(f,X));   %Array de valores f(x) -> Usado en caso que se de una funcion
+Y=[0 225 623 993];      %Array de valores f(x) -> Usado cuando se den los valores directos
+n=length(X);            %Obtiene la longitud del array Xn
+p=0;                    %Inicializacion de variable que guardara el polinomio
+
+%FOR externo para generar valores Lo, L1, L2, ... , Ln
+for i=1:n
+    num=1;
+    den=1;
+    
+    %FOR interno para generar el procesamiento de cada Ln
+    for j=1:n
+        if j~=i
+            num=num*(x-X(j));    %Numerador   X-Xk
+            den=den*(X(i)-X(j)); %Denominador Xi-Xk
+        end
+    end
+    
+    L(i)=num/den;  %Aqui se forma cada factor de Ln
+    p=p+Y(i)*L(i); %Por cada factor, se va armando el polinomio de Lagrange -> F(Xn)Ln(X)
+end
+    
+pretty(p);        %Formato para mayor legibilidad
+
+pretty(vpa(p,7)); %Formato para mayor legibilidad y valores mas cortos
+                  %Segundo valor de vpa->(7) es el numero de caracteres que se observaran
