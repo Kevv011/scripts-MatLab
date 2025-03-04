@@ -1,0 +1,41 @@
+disp('----------------------INTERPOLACION: POLINOMIO DE LAGRANGE---------------------------');
+syms x;
+
+%Inputs del programa
+X=input('Ingresar valores Xn en forma vector: ');
+op=input('¿Se da una funcion? "1" para confirmar, "0" para denegar: ');
+
+if(op == 0)
+    Y=input('Ingresar valores F(Xn) en forma de vector:'); %Si se dan los valores de F(Xn) se digitan directamente
+elseif(op == 1)
+    f=input('Ingresar la funcion: '); %Si se da una funcion, se procesa para encontrar valores F(Xn)
+    Y=double(subs(f,X));              %Crea el array de valores F(Xn) evaluando la funcion
+else
+    fprintf('No se digito una opcion valida');
+end
+
+%Procesamiento inicial
+n = length(X);
+p=0;
+
+%FOR externo para generar valores Lo, L1, L2, ... , Ln
+for i=1:n
+    num=1; %Inicializacion del numerador
+    den=1; %Inicializacion del denominador
+    
+    %FOR interno para generar el procesamiento de cada Ln y armar la funcion
+    for j=1:n
+        if j~=i
+            num=num*(x-X(j));    %Numerador   X-Xk
+            den=den*(X(i)-X(j)); %Denominador Xi-Xk
+        end
+    end
+    
+    L(i)=num/den;  %Aqui se forma cada factor de Ln
+    p=p+Y(i)*L(i); %Por cada factor, se va armando el polinomio de Lagrange -> F(Xn)Ln(X)
+end
+
+pretty(p);        %Formato para mayor legibilidad
+
+pretty(vpa(p,7)); %Formato para mayor legibilidad y valores mas cortos
+                  %Segundo valor de vpa->(7) es el numero de caracteres que se observaran
