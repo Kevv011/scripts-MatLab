@@ -1,0 +1,22 @@
+disp('---------------------------METODO DE NEVILLE---------------------------');
+syms x;
+
+%Inputs del programa
+X=input('Ingresar los valores de X como vector: '); %Vector de valores X
+Y=input('Ingresar los valores de Y como vector: '); %Vector de valores Y
+aprox= input('Ingresar el valor a aproximar: ');    %Valor a aproximar de acuerdo al enunciado
+
+%Procesamiento inicial
+n=length(X); %Se obtiene el tamaño del vector X
+Q=zeros(n);  %Se llena inicialmente la matriz de ceros
+Q(:,1)=Y;    %Se llena la primera columna de la matriz con los valores de Y
+
+%Bucle FOR anidado, que empieza a recorrer columna por columna, a partir de la segunda
+for j=2:n
+    
+    %FOR interno que llena las filas de cada columna
+    for i=j:n
+        Q(i,j)=((aprox-X(i-j+1))*(Q(i,j-1)) - (aprox-X(i))*(Q(i-1,j-1)))/(X(i) - X(i-j+1)); %Formula del metodo
+        fprintf('Aqui me quede');
+    end
+end
