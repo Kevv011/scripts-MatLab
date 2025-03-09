@@ -3,7 +3,17 @@ syms x;
 
 %Inputs del programa
 X=input('Ingresar los valores de X como vector: '); %Vector de valores X
-Y=input('Ingresar los valores de Y como vector: '); %Vector de valores Y
+op=input('Existe una funcion en el enunciado? "1" para confirmar, "0" para denegar: \n');
+
+if(op==0)
+    Y=input('Ingresar los valores de Y como vector: '); %Vector de valores Y
+elseif(op==1)
+    f=input('Ingrese la funcion: ');
+    Y=double(subs(f,X));
+else
+    fprintf('\n No ingreso una opcion valida -> REINICIAR \n');
+end
+
 aprox= input('Ingresar el valor a aproximar: ');    %Valor a aproximar de acuerdo al enunciado
 
 %Procesamiento inicial
@@ -17,6 +27,15 @@ for j=2:n
     %FOR interno que llena las filas de cada columna
     for i=j:n
         Q(i,j)=((aprox-X(i-j+1))*(Q(i,j-1)) - (aprox-X(i))*(Q(i-1,j-1)))/(X(i) - X(i-j+1)); %Formula del metodo
-        fprintf('Aqui me quede');
+        fprintf('\n\t (X-X%d)Q%d%d - (X-X%d)Q%d%d   (x-(%.2f))*(%.9f) - (x-(%.2f))*(%.9f)',double(i-j),double(i-1),double(j-2),double(i-1),double(i-2),double(j-2),double(X(i-j+1)),double(Q(i,j-1)),double(X(i)),double(Q(i-1,j-1)));
+        fprintf('\nQ%d%d= --------------------- = ------------------------------------------------------- = %9.9f', double(i-1),double(j-1),double(Q(i,j)));
+        fprintf('\n\t\t\t (X%d-X%d)\t\t\t\t\t\t\t\t    (%.2f)-(%.2f)\n',double(i-1),double(i-j),double(X(i)),double(X(i-j+1)));
     end
 end
+
+fprintf('\n----- Matriz de valores Q ------\n');
+display(Q);
+fprintf('El valor aproximado es: %.15f \n\n',double(Q(n,n)));
+
+
+
