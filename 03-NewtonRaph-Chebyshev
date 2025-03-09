@@ -1,0 +1,36 @@
+disp('EJERCICIO2');
+syms x;
+
+f=input('Ingresar la funcion: ');
+x0=input('Ingresar el valor inicial: ');
+tol=input('Ingresar el margen de error: 10^-');
+tol=10^-tol;
+
+df1=diff(f);     %Calculo de la primer derivada de f(x)
+df2=diff(df1);   %Calculo de la segunda derivada de f(x)
+
+fa=double(subs(f,x0));    %Evaluacion de x0 en F(X)
+fb=double(subs(df1,x0));  %Evaluacion de x0 en F'(X)
+fc=double(subs(df2,x0));  %Evaluacion de x0 en F''(X)
+
+x1=x0-(1-((0.5*fc*fa)/(fb^2)))*(fa/fb); %Formula de Chebyshev
+error=double(abs(x1-x0)); %Calculo del error
+cont=1;
+
+fprintf('n || X0 \t\t\t\t\t || X1 \t\t\t\t\t || Error\n');
+fprintf('%d || %.15f || %.15f || %e \n', cont,double(x0),double(x1),double(error));
+
+while (error>tol && cont<100) 
+    cont=cont+1;
+    x0=x1;
+    
+    fa=double(subs(f,x0));    %Evaluacion de x0 en F(X)
+    fb=double(subs(df1,x0));  %Evaluacion de x0 en F'(X)
+    fc=double(subs(df2,x0));  %Evaluacion de x0 en F''(X)
+
+    x1=x0-(1-((0.5*fc*fa)/(fb^2)))*(fa/fb); %Formula de Chebyshev
+    error=double(abs(x1-x0)); %Calculo del error
+    fprintf('%d || %.15f || %.15f || %e \n', cont,double(x0),double(x1),double(error)); 
+end
+
+fprintf('El valor aproximado de x es: %.15f \n', double(x1));
