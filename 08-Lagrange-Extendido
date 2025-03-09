@@ -14,6 +14,8 @@ else
     fprintf('No se digito una opcion valida');
 end
 
+aprox=input('Ingrese el valor a aproximar: ');
+
 %Procesamiento inicial
 n = length(X);
 p=0;
@@ -42,7 +44,15 @@ for i=1:n
     p=p+Y(i)*L(i); %Por cada factor, se va armando el polinomio de Lagrange -> F(Xn)Ln(X)
 end 
 
-pretty(p);        %Formato para mayor legibilidad
+pretty(p);                  %Formato para imprimir polinomio con mayor legibilidad
+pretty(vpa(p,7));           %Formato para mayor legibilidad y valores mas cortos. Segundo valor de vpa->(7) es el numero de caracteres que se observaran
+valAprox = subs(p,aprox);   %Obtencion de la aproximacion por medio del polinomio formado
+%valExacto = subs(f,aprox); %Obtencion del valor exacto cuando se da una funcion
+%error = abs(valExacto-valAprox); %Error entre ambos valores
 
-pretty(vpa(p,7)); %Formato para mayor legibilidad y valores mas cortos
-                  %Segundo valor de vpa->(7) es el numero de caracteres que se observaran
+fprintf('\n Valor aproximado de la funcion es: %.9f \n', double(valAprox));
+%fprintf('\n Valor exacto de la funcion es: %.9f \n', double(valExacto));
+%fprintf('\n Error: %e \n',double(error));
+
+%---------------------------------------------IMPORTANTE-------------------------------------------------
+%valExacto, error e impresion de estos valores, QUITAR COMENTARIOS SI SE DA UNA FUNCION F EN EL EJERCICIO
