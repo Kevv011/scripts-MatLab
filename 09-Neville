@@ -3,7 +3,17 @@ syms x;
 
 %Inputs del programa
 X=input('Ingresar los valores de X como vector: '); %Vector de valores X
-Y=input('Ingresar los valores de Y como vector: '); %Vector de valores Y
+op=input('Existe una funcion en el enunciado? "1" para confirmar, "0" para denegar: \n');
+
+if(op==0)
+    Y=input('Ingresar los valores de Y como vector: '); %Vector de valores Y
+elseif(op==1)
+    f=input('Ingrese la funcion: ');
+    Y=double(subs(f,X));
+else
+    fprintf('\n No ingreso una opcion valida -> REINICIAR \n');
+end
+
 aprox= input('Ingresar el valor a aproximar: ');    %Valor a aproximar de acuerdo al enunciado
 
 %Procesamiento inicial
