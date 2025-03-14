@@ -1,0 +1,46 @@
+disp('---------------METODO DE DIFERENCIAS DIVIDIDAS DE NEWTON----------------');
+syms x;
+
+% Inputs del programa
+X = input('Ingresar valores Xn en forma de array [x1 x2 x3 xn]: ');
+Y = input('Ingresar valores F(Xn) en forma de array [y1 y2 y3 yn]: ');
+%f = input('Ingrese la función: '); %Ingreso de una funcion (Si lo solicita el ejercicio)
+%Y = double(subs(f, X)); %Obteniendo valores de Y con la evaluacion de la funcion
+aprox = input('Ingresar el valor a aproximar: ');
+
+% Procesamiento del programa
+n = length(X); % Obteniendo longitud de vector X
+F = zeros(n);  % Matriz nula inicialmente de tamaño [n x n]
+F(:,1) = Y;    % Se llena la primera columna con los valores de Y
+
+% Calculando la tabla de diferencias divididas (Valores de An)
+for j = 2:n
+    for i = j:n
+        F(i,j) = (F(i,j-1) - F(i-1,j-1)) / (X(i) - X(i-j+1));
+    end
+end
+
+% Construcción del polinomio de Newton
+pol = F(1,1); % Primer coeficiente
+producto = 1; % Variable para acumular los productos
+
+for i = 2:n
+    producto = producto * (x - X(i-1)); % Se construye el término (x - x0)(x - x1)...
+    pol = pol + F(i,i) * producto;      % Se agrega el término al polinomio
+end
+
+% Impresión de la matriz y el polinomio
+fprintf('\n--------------- MATRIZ FORMADA: ---------------\n');
+disp(F);
+
+fprintf('\n--------------- POLINOMIO FORMADO: ---------------\n');
+pretty(vpa(pol,7));
+
+% Cálculo del valor aproximado, valor exacto y el error
+ansAprox = double(subs(pol, aprox));
+%ansExacto = double(subs(f,aprox));       %Usado cuando hay una funcion en el ejercicio
+%error = double(abs(ansExacto-ansAprox)); %Usado cuando hay una funcion en el ejercicio
+
+fprintf('El valor aproximado es: %.15f \n', ansAprox);
+%fprintf('El valor exacto es: %.15f \n', ansExacto); %Usado cuando hay una funcion en el ejercicio
+%fprintf('El error entre el valor exacto y aproximado es: %.15f \n',error); %Usado cuando hay una funcion en el ejercicio
