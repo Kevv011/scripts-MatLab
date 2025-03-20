@@ -1,0 +1,68 @@
+disp('--------------------METODO DE HERMITE--------------------');
+syms x;
+format long;
+
+X=input('Ingresar array de valores Xn: ');
+Y=input('Ingresar array de valores F(Xn): ');
+D=input('Ingresar array con valores de derivadas F`(Xn): ');
+%f=input('Ingresar la funcion dada: '); %Usada si se da una funcion en el ejercicio
+%Y=double(subs(f,X));                   %Usada si se da una funcion en el ejercicio 
+%D=double(subs(diff(f),X));             %Usada si se da una funcion en el ejercicio
+aprox=input('Ingresar el valor a aproximar: ');
+
+%Procesamiento inicial
+n=length(X);
+
+%FOR para crear nuevos arrays con las imagenes duplicadas
+for i=1:n
+    Z(2*i-1)=X(i); %Duplicacion de valores Xn para crear el array de valores Zn
+    Z(2*i)=X(i);   
+    Y2(2*i-1)=Y(i);%Duplicacion de valores F(Xn) para crear el nuevo array de Y
+    Y2(2*i)=Y(i);
+end
+
+n=length(Z); %Redefinicion de "n"
+F=zeros(n);  %Definicion de la matriz
+F(:,1)=Y2;   %Primera columna de la matriz con valores de array Y2
+
+%FOR para rellenar 2° columna intercalada de valores del array de derivadas
+for i=2:2:n
+    F(i,2)=D(i/2); % Derivadas en las filas duplicadas
+end
+
+%FOR para rellenar intercalado con las imagenes acorde a diferencias divdidas
+for i=3:2:n-1
+    F(i,2)=(F(i,1)-F(i-1,1))/(Z(i)-Z(i-1)); 
+end
+
+%FOR anidado para rellenar desde la 3° columna en adelante con diferencias divididas
+for j = 3:n
+    for i = j:n
+        F(i,j) = (F(i,j-1) - F(i-1,j-1)) / (Z(i) - Z(i-j+1));
+    end
+end
+
+% Construcción del polinomio de Newton
+pol = F(1,1); 
+producto = 1; 
+
+for i = 2:n
+    producto = producto * (x - Z(i-1)); 
+    pol = pol + F(i,i) * producto;
+end
+
+% Impresión de la matriz y el polinomio
+fprintf('\n--------------- MATRIZ FORMADA: ---------------\n');
+disp(F);
+
+fprintf('\n--------------- POLINOMIO FORMADO: ---------------\n');
+pretty(vpa(pol,7));
+
+% Cálculo del valor aproximado, valor exacto y el error
+ansAprox = double(subs(pol, aprox));
+%ansExacto = double(subs(f,aprox));       %Usado cuando hay una funcion en el ejercicio
+%error = double(abs(ansExacto-ansAprox)); %Usado cuando hay una funcion en el ejercicio
+
+fprintf('El valor aproximado es: %.15f \n', ansAprox);
+%fprintf('El valor exacto es: %.15f \n', ansExacto); %Usado cuando hay una funcion en el ejercicio
+%fprintf('El error entre el valor exacto y aproximado es: %.15f \n',error); %Usado cuando hay una funcion en el ejercicio
