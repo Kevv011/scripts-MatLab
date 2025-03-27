@@ -1,0 +1,37 @@
+disp('-------------APROXIMACION DE RICHARDSON-------------');
+syms x;
+format long;
+
+%Inputs del programa
+f=input('Ingresar la funcion: ');
+h=input('Ingresar el valor de h: ');
+c=input('Ingresar el valor a aproximar la derivada "c": ');
+n=input('Ingresar el indice de aproximacion: ');
+fprintf('\n');
+
+%Procesamiento inicial
+N=zeros(n);
+
+%FOR para llenar primera columna con formula de 3 puntos
+for i=1:n
+    N(i,1)=(subs(f,c+h)-subs(f,c-h))/(2*h);
+    h=h/2;
+end
+
+%FOR anidado para llenar desde la columna 2 con aproximacion de Richardson
+for j=2:n
+    for i=1:n-j+1
+        N(i,j)=(4^(j-1)*N(i+1,j-1)-N(i,j-1))/(4^(j-1)-1);
+    end
+end
+
+%Impresion de la matriz, aproximacion estimada, valor exacto y error
+fprintf('MATRIZ N OBTENIDA: \n');
+disp(N);
+
+ansAprox=N(1,n);
+ansExacto=double(subs(diff(f),c));
+error=abs(ansExacto-ansAprox);
+fprintf('El valor aproximado de la derivada es: %.15f \n',ansAprox);
+fprintf('El valor exacto de la derivada es: %.15f \n',ansExacto);
+fprintf('Error de aproximacion: %e \n',error);
