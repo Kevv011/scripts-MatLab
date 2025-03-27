@@ -3,7 +3,6 @@ syms x;
 
 %Inputs del programa
 X=input('Ingresar valores Xn en forma vector: ');
-op=input('¿Se da una funcion? "1" para confirmar, "0" para denegar: ');
 Y=input('Ingresar valores F(Xn) en forma de vector: '); %Si se dan los valores de F(Xn) se digitan directamente
 %f=input('Ingresar la funcion: '); %Si se da una funcion, se procesa para encontrar valores F(Xn)
 %Y=double(subs(f,X));              %Crea el array de valores F(Xn) evaluando la funcion
