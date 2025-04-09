@@ -1,0 +1,52 @@
+disp('--------------INTEGRACION DE ROMBERG---------------');
+syms x;
+format long;
+
+% Inputs del programa
+a = input('Ingrese el límite inferior a: ');
+b = input('Ingrese el límite superior b: ');
+f = input('Ingrese la función a integrar: ');
+n = input('Ingrese el valor de n (nivel de precisión deseado): ');
+
+% Inicializar la matriz R
+R = zeros(n, n);
+
+% Calcular h inicial
+h = b - a;
+
+% Calcular R(i,1) con la regla del trapecio compuesta recursiva
+for i = 1:n
+    if i == 1
+        R(i,1) = (h / 2) * (subs(f, a) + subs(f, b));
+    else
+        h = (b - a) / 2^(i-1); % h se parte a la mitad en cada nivel
+        suma = 0;
+        
+        for k = 1:2^(i-2)
+            xk = a + (2*k - 1) * h;
+            suma = suma + subs(f, xk);
+        end
+        R(i,1) = 0.5 * R(i-1,1) + h * double(suma);
+    end
+end
+
+% Llenar la matriz con extrapolación de Richardson
+for j = 2:n
+    for i = j:n
+        R(i,j) = (4^(j-1)*R(i,j-1) - R(i-1,j-1)) / (4^(j-1) - 1);
+    end
+end
+
+% Mostrar resultados
+disp('Matriz de Romberg R:');
+disp(R);
+
+aprox = R(n,n);
+exacto = double(int(f,a,b));
+error = abs(exacto-aprox);
+errorPorc = (error/exacto)*100;
+
+fprintf('El valor aproximado de la integral con R(%d,%d) es: %.15f\n', n, n, aprox);
+fprintf('El valor exacto de la integral es: %.15f\n', exacto);
+fprintf('Error de aproximacion: %e \n', error);
+fprintf('Error porcentual: %.5f porciento\n', errorPorc);
