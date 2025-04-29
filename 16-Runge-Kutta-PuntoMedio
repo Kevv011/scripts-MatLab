@@ -24,7 +24,7 @@ for i=1:n
     k1=subs(f,[t,y],[T(i),Y(i)]);
     k2=subs(f,[t,y],[T(i)+(h/2),Y(i)+(h/2)*k1]);
     
-    Y(i+1)=Y(i)+h*k2;  %Valores aproximados con formula de Heun
+    Y(i+1)=Y(i)+h*k2;  %Valores aproximados con formula de punto medio
     exacta=subs(F,T(i+1));        %Valores exactos
     error=abs(exacta-Y(i+1));     %Error
     
