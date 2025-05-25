@@ -1,0 +1,31 @@
+disp('-------------TAYLOR ORDEN SUPERIOR-------------');
+syms t y
+format long
+
+%Inputs del programa
+f=input('Funcion f(t,y): ');
+intervalo=input('Intervala [a b]: ');
+y0=input('Condicion inicial: ');
+h=input('Valor de h: ');
+
+%Derivadas
+d1f=input('Ingresar derivada implicita d1f: ');
+d2f=input('Ingresar derivada implicita d2f: ');
+d3f=input('Ingresar derivada implicita d3f: ');
+
+%Procesamiento inicial
+a=intervalo(1);
+b=intervalo(2);
+T=[a:h:b];
+n=length(T)-1;
+Y(1)=y0;
+
+g=h*f+(h^2/2)*d1f+(h^3/6)*d2f+(h^4/24)*d3f; % Serie de Taylor
+
+%For para valores aproximados
+for i=1:n
+    Y(i+1)=Y(i)+subs(g,[t,y],[T(i),Y(i)]);
+    
+    fprintf('\n %.15f \n', double(Y(i+1)));
+end
+
