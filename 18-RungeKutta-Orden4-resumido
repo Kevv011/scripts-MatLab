@@ -1,0 +1,44 @@
+disp('---------------------RUNGE KUTTA ORDEN 4----------------');
+syms t y;
+format long;
+
+%Inputs del programa
+f=input('Ingresar ec diferencial dy/dt: ');
+intervalo=input('Ingresar intervalo [a b]: ');
+y0=input('Ingresar valor inicial: ');
+h=input('Ingresar valor h: ');
+F=input('Ingresar solucion particular de la ec diferencial: ');
+
+%Procesamiento inicial
+a=intervalo(1); 
+b=intervalo(2);
+T=[a:h:b];      
+n=length(T)-1;
+Y(1)=y0;  
+
+%Constantes
+A1=1/6; A2=1/3; A3=1/3; A4=1/6;
+B1=1/2; B2=1/2; B3=1;
+C11=1/2; C21=0; C22=1/2; C31=0; C32=0; C33=1;
+
+fprintf('ti || K1 || K2 || K3 || K4 || Yi || F(ti) || error \n');  
+fprintf('%.15f || %.9f || %.9f || %.9f || %.9f || %.15f || %.15f || %e \n', T(1),0,0,0,0,double(Y(1)),double(Y(1)),0);
+
+%FOR para encontrar los demas valores
+for i=1:n
+    k1=subs(f,[t,y],[T(i),Y(i)]);
+    k2=subs(f,[t,y],[T(i)+h*B1,Y(i)+h*C11*k1]);
+    k3=subs(f,[t,y],[T(i)+h*B2,Y(i)+h*C21*k1+h*C22*k2]);
+    k4=subs(f,[t,y],[T(i)+h*B3,Y(i)+h*C31*k1+h*C32*k2+h*C33*k3]);
+    
+    Y(i+1)=Y(i)+h*(A1*k1+A2*k2+A3*k3+A4*k4);  
+    exacta=subs(F,T(i+1));      
+    error=abs(exacta-Y(i+1));   
+    
+    fprintf('%.15f || %.9f || %.9f || %.9f || %.9f || %.15f || %.15f || %e \n', T(i+1),double(k1),double(k2),double(k3),double(k4),double(Y(i+1)),double(exacta),double(error));
+end
+
+%Impresion de resultados
+fprintf('Valor aproximado Y(%.15f) = %.15f \n',b,double(Y(n+1)));
+fprintf('Valor exacto F(%.15f) = %.15f \n',b,double(exacta));
+fprintf('Error = %e \n',double(error));
