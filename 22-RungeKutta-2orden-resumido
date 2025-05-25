@@ -1,0 +1,42 @@
+disp('---------------------RUNGE KUTTA ORDEN 2----------------');
+syms t y;
+format long;
+
+%Inputs del programa
+f=input('Ingresar ec diferencial dy/dt: ');
+intervalo=input('Ingresar intervalo [a b]: ');
+y0=input('Ingresar valor inicial: ');
+h=input('Ingresar valor h: ');
+F=input('Ingresar solucion particular de la ec diferencial: ');
+
+%Procesamiento inicial
+a=intervalo(1); 
+b=intervalo(2);
+T=[a:h:b];      
+n=length(T)-1;
+Y(1)=y0;  
+
+%Constantes
+%A1=1/2; A2=1/2; B1=1; C11=1;     %Euler Mejorado
+%A1=1/4; A2=3/4; B1=2/3; C11=2/3; %Heun
+%A1=0; A2=1; B1=1/2; C11=1/2;     %Punto Medio
+
+fprintf('ti || k1 || k2 || Yi || F(ti) || error \n');  
+fprintf('%.15f || %.9f || %.9f || %.15f || %.15f || %e \n', T(1),0,0,double(Y(1)),double(Y(1)),0);
+
+%FOR para encontrar los demas valores
+for i=1:n
+    k1=subs(f,[t,y],[T(i),Y(i)]);
+    k2=subs(f,[t,y],[T(i)+h*B1,Y(i)+h*C11*k1]);
+    
+    Y(i+1)=Y(i)+h*(A1*k1+A2*k2);  
+    exacta=subs(F,T(i+1));      
+    error=abs(exacta-Y(i+1));   
+    
+    fprintf('%.15f || %.9f || %.9f || %.15f || %.15f || %e \n', T(i+1),double(k1),double(k2),double(Y(i+1)),double(exacta),double(error));
+end
+
+%Impresion de resultados
+fprintf('Valor aproximado Y(%.15f) = %.15f \n',b,double(Y(n+1)));
+fprintf('Valor exacto F(%.15f) = %.15f \n',b,double(exacta));
+fprintf('Error = %e \n',double(error));
