@@ -1,0 +1,86 @@
+syms t u1 u2 u3;
+
+disp('Metodo de Runge Kutta de cuarto orden - orden superior 3')
+
+fu1 = input('dU1/dt= '); %u'1 = u2;
+
+fu2 = input('dU2/dt= '); %u'2 = u3;
+
+fu3 = input('dU3/dt= '); %u'3 = (función despejada en terminos de u)
+
+intervalo=input('Ingrese el intervalo [a,b]:');
+
+u10=input('Ingrese el valor inicial de U1:');
+
+u20=input('Ingrese el valor inicial de U2:');
+
+u30=input('Ingrese el valor inicial de U3:');
+
+h=input('Ingrese el valor de h:');
+
+a=intervalo(1);
+
+b=intervalo(2);
+
+T=[a:h:b]; % Vector con los valores de t
+
+n=length(T)-1; % Numero de subintervalos entre [a,b]
+
+U1(1)=u10;
+
+U2(1)=u20; % La primera posicion del arreglo es el valor inicial
+
+U3(1)=u30;
+
+for i=1:n
+
+    fprintf('i=%2.0f\n',i)
+
+    fprintf('t=%.15f\n',T(i+1))
+
+    k11=double(subs(fu1,{t,u1,u2,u3},{T(i),U1(i),U2(i),U3(i)}))
+
+    k12=double(subs(fu2,{t,u1,u2,u3},{T(i),U1(i),U2(i),U3(i)}))
+
+    k13=double(subs(fu3,{t,u1,u2,u3},{T(i),U1(i),U2(i),U3(i)}))
+
+    
+
+    k21=double(subs(fu1,{t,u1,u2,u3},{T(i)+h/2,U1(i)+(k11*h)/2,U2(i)+(k12*h)/2,U3(i)+(k13*h)/2}))
+
+    k22=double(subs(fu2,{t,u1,u2,u3},{T(i)+h/2,U1(i)+(k11*h)/2,U2(i)+(k12*h)/2,U3(i)+(k13*h)/2}))
+
+    k23=double(subs(fu3,{t,u1,u2,u3},{T(i)+h/2,U1(i)+(k11*h)/2,U2(i)+(k12*h)/2,U3(i)+(k13*h)/2}))   
+
+    
+
+    k31=double(subs(fu1,{t,u1,u2,u3},{T(i)+h/2,U1(i)+(k21*h)/2,U2(i)+(k22*h)/2,U3(i)+(k23*h)/2}))
+
+    k32=double(subs(fu2,{t,u1,u2,u3},{T(i)+h/2,U1(i)+(k21*h)/2,U2(i)+(k22*h)/2,U3(i)+(k23*h)/2}))
+
+    k33=double(subs(fu3,{t,u1,u2,u3},{T(i)+h/2,U1(i)+(k21*h)/2,U2(i)+(k22*h)/2,U3(i)+(k23*h)/2 }))
+
+    
+
+    k41=double(subs(fu1,{t,u1,u2,u3},{T(i)+h,U1(i)+k31*h,U2(i)+k32*h,U3(i)+k33*h}))
+
+    k42=double(subs(fu2,{t,u1,u2,u3},{T(i)+h,U1(i)+k31*h,U2(i)+k32*h,U3(i)+k33*h}))
+
+    k43=double(subs(fu3,{t,u1,u2,u3},{T(i)+h,U1(i)+k31*h,U2(i)+k32*h,U3(i)+k33*h}))
+
+   
+
+    U1(i+1)=double(U1(i)+(h/6)*(k11+2*k21+2*k31+k41));
+
+    U2(i+1)=double(U2(i)+(h/6)*(k12+2*k22+2*k32+k42));
+
+    U3(i+1)=double(U3(i)+(h/6)*(k13+2*k23+2*k33+k43));
+
+    
+
+    fprintf('U1(t)=y(t)=%.15f\n',U1(i+1))
+
+    fprintf('U2(t)=Dy(t)=%.15f\n',U2(i+1))
+
+    fprintf('U3(t)=D2y(t)=%.15f\n',U3(i+1))
+end
