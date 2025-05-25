@@ -1,0 +1,24 @@
+disp('-------------METODO DE EULER-------------');
+syms t y
+format long
+
+%Inputs del programa
+f=input('Ec diferencial dy/dt: ');
+intervalo=input('Intervala [a b]: ');
+y0=input('Condicion inicial: ');
+h=input('Valor de h: ');
+
+%Procesamiento inicial
+a=intervalo(1);
+b=intervalo(2);
+T=[a:h:b];
+n=length(T)-1;
+Y(1)=y0;
+
+%For para valores aproximados
+for i=1:n
+    Y(i+1)=Y(i)+h*subs(f,[t,y],[T(i),Y(i)]);
+    
+    fprintf('\n %.15f \n', double(Y(i+1)));
+end
+
