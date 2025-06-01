@@ -1,0 +1,90 @@
+fprintf(' ---------------------Newton-Raphson Multivariable 3X3--------------------- \n');
+syms x y z;
+format long;
+
+% 1) Solicitar valores iniciales
+xk = input('Valor x(0): ');
+yk = input('Valor y(0): ');
+zk = input('Valor z(0): ');
+
+tol = input('Tolerancia: 10^- ');
+tol = 10^-tol;
+
+max_iter = 100;
+
+%2) Solicitar arreglo de funciones
+fprintf('\nArreglo de funciones F(x,y,z)=0 \n');
+
+f1 = input('f1(x,y,z) = ', 's');
+f2 = input('f2(x,y,z) = ', 's');
+f3 = input('f3(x,y,z) = ', 's');
+
+% 3) Solicitar los 9 elementos de la Jacobiana J(x,y,z) 
+fprintf('\nElementos de la matriz Jacobiana J(x,y,z).\n');
+
+J11_str = input('J11 = ', 's');
+J12_str = input('J12 = ', 's');
+J13_str = input('J13 = ', 's');
+
+J21_str = input('J21 = ', 's');
+J22_str = input('J22 = ', 's');
+J23_str = input('J23 = ', 's');
+
+J31_str = input('J31 = ', 's');
+J32_str = input('J32 = ', 's');
+J33_str = input('J33 = ', 's');
+
+% 4) Bucle principal de Newton-Raphson
+fprintf('  n   ||       x               ||       y               ||       z               ||     Error\n');
+
+
+for k = 1:max_iter
+    % 4.1) Evaluar f1, f2, f3 en (xk, yk, zk)
+    x = xk;  y = yk;  z = zk;
+    
+    f1k = eval(f1);
+    f2k = eval(f2);
+    f3k = eval(f3);
+    Fk = [f1k; f2k; f3k];
+    
+    % 4.2) Evaluar la Jacobiana Jk en (xk, yk, zk)
+    J11 = eval(J11_str);
+    J12 = eval(J12_str);
+    J13 = eval(J13_str);
+    J21 = eval(J21_str);
+    J22 = eval(J22_str);
+    J23 = eval(J23_str);
+    J31 = eval(J31_str);
+    J32 = eval(J32_str);
+    J33 = eval(J33_str);
+    
+    Jk = [ J11, J12, J13;
+           J21, J22, J23;
+           J31, J32, J33 ];
+    
+    % 4.3) Calcular delta = -Jk \ Fk
+    delta = - ( Jk \ Fk );
+    
+    % 4.4) Actualizar (xk, yk, zk) y calcular norma
+    xk = xk + delta(1);
+    yk = yk + delta(2);
+    zk = zk + delta(3);
+    norm_delta = norm(delta, Inf);
+    
+    % 4.5) Mostrar iteración
+    fprintf('%d  ||  %.15f  ||  %.15f  ||  %.15f  ||  %e\n', ...
+            k, xk, yk, zk, norm_delta);
+    
+    % 4.6) Criterio de paro
+    if norm_delta < tol
+        break
+    end
+   
+end
+
+% 5) Impresion de resultados
+fprintf('\nSolución aproximada:\n');
+fprintf('  x = %.12e\n', xk);
+fprintf('  y = %.12e\n', yk);
+fprintf('  z = %.12e\n', zk);
+fprintf('\n');
